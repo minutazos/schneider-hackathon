@@ -11,15 +11,11 @@ data['countryName'] = le.fit_transform(data['countryName'])
 data['eprtrSectorName'] = le.fit_transform(data['eprtrSectorName'])
 data['City'] = le.fit_transform(data['City'])
 data['EPRTRAnnexIMainActivityCode'] = le.fit_transform(data['EPRTRAnnexIMainActivityCode'])
-
-
-
-
-
 features = data.columns.tolist()
 features.remove('pollutant')
 X = data[features]
 y = data['pollutant']
+print(features)
 
 # Split dataset into training set and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
