@@ -16,6 +16,15 @@ data = data.drop('countryName', axis=1)
 data = data.join(one_hot)
 
 
+def label_code(row):
+    return row['EPRTRAnnexIMainActivityCode'][0:4]
+
+
+data['Activity Code'] = data.apply(lambda row: label_code(row), axis=1)
+one_hot = pandas.get_dummies(data['Activity Code'])
+data = data.drop('Activity Code', axis=1)
+data = data.join(one_hot)
+
 features = data.columns.tolist()
 features.remove('Unnamed: 0')
 features.remove('pollutant')
@@ -45,4 +54,4 @@ print(metrics.recall_score(y_test, y_pred, average='micro'))
 print(metrics.f1_score(y_test, y_pred, average='micro'))
 
 feature_imp = pandas.Series(clf.feature_importances_, index=features).sort_values(ascending=False)
-print(feature_imp)
+print(feature_imp.to_string())
