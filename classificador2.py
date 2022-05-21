@@ -1,35 +1,21 @@
 import pandas
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 
 data = pandas.read_csv('dataset.csv')
-
-# encoding some features
-
-one_hot = pandas.get_dummies(data['eprtrSectorName'])
-data = data.drop('eprtrSectorName', axis=1)
-data = data.join(one_hot)
-
-one_hot = pandas.get_dummies(data['countryName'])
-data = data.drop('countryName', axis=1)
-data = data.join(one_hot)
-
-
-def label_code(row):
-    return row['EPRTRAnnexIMainActivityCode'][0:4]
-
-
-data['Activity Code'] = data.apply(lambda row: label_code(row), axis=1)
-one_hot = pandas.get_dummies(data['Activity Code'])
-data = data.drop('Activity Code', axis=1)
-data = data.join(one_hot)
-data = data.drop('City', axis=1)
+le = LabelEncoder()
+data['pollutant'] = le.fit_transform(data['pollutant'])
+data['countryName'] = le.fit_transform(data['countryName'])
+data['eprtrSectorName'] = le.fit_transform(data['eprtrSectorName'])
+data['City'] = le.fit_transform(data['City'])
 
 features = data.columns.tolist()
 features.remove('pollutant')
 X = data[features]
 y = data['pollutant']
+print(features)
 
 # Split dataset into training set and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)

@@ -5,16 +5,6 @@ import os
 def scrapePdf(pdfPath):
     pdf = pq.PDFQuery(pdfPath)
     pdf.load()
-    pollutant = pdf.pq('LTTextLineHorizontal:overlaps_bbox("306.17, 570.67, 406.325, 581.71")').text()
-    match(pollutant):
-        case 'Nitrogen oxides (NOX)':
-            pollutant = '0'
-        case 'Carbon dioxide (CO2)':
-            pollutant = '1'
-        case 'Methane (CH4)':
-            pollutant = '2'
-        case _:
-            pollutant = '-1'
     pdfData = pd.DataFrame({
             "countryName":  pdf.pq('LTTextLineHorizontal:overlaps_bbox("138.98, 686.86, 211.513, 697.9")').text(),
             "EPRETRSectorCode": pdf.pq('LTTextLineHorizontal:overlaps_bbox("180.26, 643.3, 185.857, 654.34")').text(),
@@ -26,7 +16,7 @@ def scrapePdf(pdfPath):
             "City": pdf.pq('LTTextLineHorizontal:overlaps_bbox("138.98, 672.34, 221.195, 683.38")').text(),
             "CITY ID": pdf.pq('LTTextLineHorizontal:overlaps_bbox("138.98, 175.7, 312.518, 186.74")').text(),
             "targetRelease": pdf.pq('LTTextLineHorizontal:overlaps_bbox("138.98, 570.67, 154.094, 581.71")').text(),
-            "pollutant": pollutant,
+            "pollutant": pdf.pq('LTTextLineHorizontal:overlaps_bbox("306.17, 570.67, 406.325, 581.71")').text(),
             "emission": pdf.pq('LTTextLineHorizontal:overlaps_bbox("152.06, 556.15, 185.857, 567.19")').text(),
             "DAY": pdf.pq('LTTextLineHorizontal:overlaps_bbox("174.62, 527.11, 185.857, 538.15")').text(),
             "MONTH": pdf.pq('LTTextLineHorizontal:overlaps_bbox("347.47, 527.11, 384.086, 538.15")').text().split(" ", 1)[0],

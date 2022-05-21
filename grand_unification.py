@@ -18,6 +18,9 @@ def getsectorcode(string):
     return string[0]
 
 
+def
+
+
 # in order to concatenate all datasets we need to make some adjustments
 pdf_data.drop(columns=['emission'], inplace=True)
 csv_data['EPRTRAnnexIMainActivityCode'] = csv_data.apply(lambda row: getcode(row['EPRTRAnnexIMainActivityLabel'], dictionary), axis=1)
@@ -29,6 +32,7 @@ json_data.drop(columns=['EPRTRSectorCode'], inplace=True)
 pdf_data.drop(columns=['EPRTRAnnexIMainActivityLabel'], inplace=True)
 json_data.drop(columns=['Unnamed: 0'], inplace=True)
 pdf_data.rename(columns={'eptrSectorName': 'eprtrSectorName'}, inplace=True)
+
 
 data = pandas.concat([csv_data, json_data, pdf_data], axis='rows')
 data.drop(columns=['FacilityInspireID'], inplace=True)
